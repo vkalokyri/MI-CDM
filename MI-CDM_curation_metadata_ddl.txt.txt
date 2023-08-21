@@ -1,0 +1,28 @@
+CREATE TABLE imaging_curation (
+    imaging_curation_id INTEGER NOT NULL PRIMARY KEY,
+    source_imaging_study_id INTEGER REFERENCES imaging_study(imaging_study_id),
+    source_imaging_series_id INTEGER REFERENCES imaging_series(imaging_series_id),
+    source_static_imaging_series_id INTEGER REFERENCES imaging_series(imaging_series_id),
+    derived_imaging_series_id INTEGER,
+    imaging_curation_task VARCHAR(255),
+    imaging_curation_datetime TIMESTAMP,
+    imaging_curator_id INTEGER REFERENCES person(person_id),
+    imaging_curation_status VARCHAR(50),
+    anatomic_site_concept_id INTEGER REFERENCES concept (concept_id),
+    imaging_finding_concept_id INTEGER REFERENCES concept (concept_id),
+    imaging_curation_method VARCHAR(255),
+    imaging_curation_algorithm VARCHAR(255),
+    imaging_curation_software VARCHAR(255),
+    imaging_curation_review_status VARCHAR(50),
+    imaging_curation_reviewer_id INTEGER REFERENCES person(person_id),
+    imaging_curation_review_datetime TIMESTAMP,
+    imaging_curation_parent_id INTEGER REFERENCES imaging_curation(imaging_curation_id)
+);
+
+CREATE TABLE parameter (
+    parameter_id INTEGER NOT NULL PRIMARY KEY,
+    imaging_curation_id INTEGER REFERENCES imaging_curation(imaging_curation_id),
+    parameter_name VARCHAR(255),
+    parameter_type VARCHAR(50),
+    parameter_value VARCHAR(255)
+);

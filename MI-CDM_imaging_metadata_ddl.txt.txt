@@ -1,0 +1,47 @@
+CREATE TABLE imaging_study (
+    imaging_study_id INTEGER NOT NULL PRIMARY KEY,
+    person_id INTEGER NOT NULL REFERENCES person(person_id),
+    procedure_occurrence_id INTEGER NOT NULL REFERENCES procedure_occurrence(procedure_occurrence_id),
+    imaging_study_date DATE NOT NULL,
+    manufacturer_name VARCHAR(255),
+    manufacturer_model VARCHAR(255),
+    imaging_study_source_uid VARCHAR(255),
+    imaging_study_access_uri VARCHAR(255),
+    imaging_study_description_source_value TEXT,
+    number_of_images INTEGER,
+    number_of_series INTEGER
+);
+
+CREATE TABLE imaging_series (
+    imaging_series_id INTEGER NOT NULL PRIMARY KEY,
+    person_id INTEGER NOT NULL REFERENCES person(person_id),
+    imaging_study_id INTEGER NOT NULL REFERENCES imaging_study(imaging_study_id),
+    imaging_series_date DATE NOT NULL,
+    imaging_modality_concept_id INTEGER NOT NULL REFERENCES concept (concept_id),
+    laterality_concept_id INTEGER REFERENCES concept (concept_id),
+    body_region_concept_id INTEGER NOT NULL REFERENCES concept (concept_id),
+    patient_position_concept_id INTEGER REFERENCES concept (concept_id),
+    patient_orientation_concept_id INTEGER REFERENCES concept (concept_id),
+    series_number INTEGER,
+    pixel_data_characteristics VARCHAR(255),
+    patient_exam_characteristics VARCHAR(255),
+    imaging_series_source_uid VARCHAR(255),
+    imaging_series_access_uri VARCHAR(255),
+    imaging_series_source_description TEXT,
+    number_of_images INTEGER
+);
+
+CREATE TABLE imaging_modality (
+    imaging_modality_field_id INTEGER NOT NULL PRIMARY KEY,
+    imaging_series_id INTEGER REFERENCES imaging_series(imaging_series_id),
+    person_id INTEGER REFERENCES person(person_id),
+    imaging_study_id INTEGER REFERENCES imaging_study(imaging_study_id),
+    imaging_modality_concept_id INTEGER REFERENCES concept (concept_id),
+    imaging_modality_field_concept_id INTEGER REFERENCES concept (concept_id),
+    imaging_modality_field_value_as_concept_id INTEGER REFERENCES concept (concept_id),
+    imaging_modality_field_value_as_number NUMERIC,
+    imaging_modality_field_unit_concept_id INTEGER REFERENCES concept (concept_id),
+    imaging_modality_field_source_concept_id INTEGER REFERENCES concept (concept_id),
+    imaging_modality_field_source_value VARCHAR(255),
+    imaging_modality_field_value_source_value VARCHAR(255)
+);
